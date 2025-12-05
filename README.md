@@ -61,6 +61,10 @@ Built as part of a **UI Dev / React JS Internship Task**.
 
 ## 📸 Screenshots
 
+<img width="1884" height="865" alt="Screenshot 2025-12-06 000538" src="https://github.com/user-attachments/assets/a7f00b73-98de-4974-b1a2-d716d7fd566d" />
+<img width="1902" height="876" alt="Screenshot 2025-12-06 000517" src="https://github.com/user-attachments/assets/60f6d8ab-b2b6-415a-9103-ff149a496c02" />
+<img width="1901" height="878" alt="image" src="https://github.com/user-attachments/assets/22f62b3b-aa12-4150-9f16-877d91f2d8a0" />
+
 
 
 ---
