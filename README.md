@@ -47,6 +47,25 @@ A responsive React.js web app to search movies using the OMDb API, view detailed
 
 ---
 
+⚙️ Setup & Installation
+
+    # 1. Clone the repository
+        git clone https://github.com/gautam1025/Movie_Explorer.git
+        cd Movie_Explorer
+
+    # 2. Install dependencies
+        npm install
+
+    # 3. Create environment file
+        echo "VITE_OMDB_API_KEY=your_omdb_api_key_here" > .env
+
+    # 4. Start the dev server
+        npm run dev
+
+Obtain a free OMDb API key from their website and put it in .env:
+    VITE_OMDB_API_KEY=your_omdb_api_key_here
+
+
 ## 📁 Project Structure
 
 ```text
@@ -67,21 +86,4 @@ src/
   App.css                # Global styles & animations
   main.jsx               # App entry point (ReactDOM + Router + Provider)
 
-⚙️ Setup & Installation
-
-    # 1. Clone the repository
-        git clone https://github.com/gautam1025/Movie_Explorer.git
-        cd Movie_Explorer
-
-    # 2. Install dependencies
-        npm install
-
-    # 3. Create environment file
-        echo "VITE_OMDB_API_KEY=your_omdb_api_key_here" > .env
-
-    # 4. Start the dev server
-        npm run dev
-
-Obtain a free OMDb API key from their website and put it in .env:
-    VITE_OMDB_API_KEY=your_omdb_api_key_here
 
