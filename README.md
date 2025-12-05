@@ -1,89 +1,107 @@
 # 🎬 Movie Explorer – React JS UI
 
-A responsive React.js web app to search movies using the OMDb API, view detailed information, and manage favourite movies. Built as part of a UI Dev / React JS internship task.
+A responsive React.js web app to search movies using the OMDb API, view detailed information, and manage favourite movies.  
+Built as part of a **UI Dev / React JS Internship Task**.
+
+---
+
+## 🌟 Live Demo
+
+🔗 **Live Website**: _Coming Soon (Netlify/Vercel deployment)_  
+📦 **Repository**: https://github.com/gautam1025/Movie_Explorer
 
 ---
 
 ## 🚀 Features
 
 - 🔎 **Movie Search**
-  - Search by movie title using the OMDb API.
-  - Results displayed as responsive cards with poster, title, and year.
+  - Fetch movies by title from OMDb API
+  - Responsive movie card layout with posters
 
 - 📄 **Movie Details Page**
-  - Route: `/movie/:id`
-  - Shows title, year, runtime, rating, genre, actors, plot, poster, and IMDb rating.
-
-- 🧭 **Routing**
-  - `/` – Search page
-  - `/movie/:id` – Movie details page
-  - `/favorites` – List of favourite movies
+  - More info: year, runtime, genre, actors, plot, IMDb rating
+  - Smooth navigation via React Router
 
 - ⭐ **Favourites System**
-  - Add / remove movies from favourites using a star button.
-  - Favourites are stored in **localStorage**.
-  - Global favourites count shown in navbar via **React Context**.
-  - Dedicated **Favourites** page to view all saved movies.
+  - Add/remove movies using a star toggle button
+  - Data persisted in **localStorage**
+  - Global state handled with **React Context**
+  - Dedicated `/favorites` page to manage saved movies
 
-- ⏳ **Loading & Error States**
-  - Central `Loader` component with a spinner.
-  - User‑friendly error messages when API calls fail.
+- 🧭 **Routing**
+  | Route | Purpose |
+  |-------|---------|
+  | `/` | Search movies |
+  | `/movie/:id` | Movie details |
+  | `/favorites` | View saved favourites |
 
-- 📱 **Responsive & Polished UI**
-  - Mobile‑first layout with CSS grid for cards.
-  - Sticky, glass‑effect navbar.
-  - Animated glowing background using CSS keyframes.
-  - Card hover and fade‑in animations for more engaging UX.
+- ⏳ **User Feedback**
+  - Loading spinner while fetching
+  - Friendly error messages when API fails
+
+- ✨ **Modern UI**
+  - Mobile‑first design
+  - Animated glowing background using CSS keyframes
+  - Card hover + staggered fade‑in animation
+  - Sticky glassmorphic navbar
 
 ---
 
 ## 🛠 Tech Stack
 
-- **React.js** (Vite)
-- **React Router DOM**
-- **Context API** for global favourites state
-- **OMDb API** for movie data
-- Plain **CSS** for styling and animations
+| Technology | Purpose |
+|-----------|---------|
+| React.js (Vite) | Frontend Framework |
+| React Router DOM | Client-side routing |
+| Context API | Global state (Favourites) |
+| OMDb API | Movie database |
+| CSS | UI + animations |
 
 ---
 
-⚙️ Setup & Installation
-
-    # 1. Clone the repository
-        git clone https://github.com/gautam1025/Movie_Explorer.git
-        cd Movie_Explorer
-
-    # 2. Install dependencies
-        npm install
-
-    # 3. Create environment file
-        echo "VITE_OMDB_API_KEY=your_omdb_api_key_here" > .env
-
-    # 4. Start the dev server
-        npm run dev
-
-Obtain a free OMDb API key from their website and put it in .env:
-    VITE_OMDB_API_KEY=your_omdb_api_key_here
+## 📸 Screenshots
 
 
-## 📁 Project Structure
 
-```text
+---
+
+## ⚙️ Installation & Setup
+
+```bash
+# 1️⃣ Clone the repository
+git clone https://github.com/gautam1025/Movie_Explorer.git
+cd Movie_Explorer
+
+# 2️⃣ Install dependencies
+npm install
+
+# 3️⃣ Add environment variables
+echo "VITE_OMDB_API_KEY=your_omdb_api_key_here" > .env
+
+# 4️⃣ Start the development server
+npm run dev
+
+
+🔑 Get a free OMDb API key from: https://www.omdbapi.com/
+Then update .env:
+VITE_OMDB_API_KEY=your_omdb_api_key_here
+
+
+📁 Project Structure
+
 src/
   api/
-    omdb.js              # OMDb API functions (search + details)
+    omdb.js              # OMDb API functions
   components/
-    Loader.jsx           # Reusable loading spinner
-    MovieCard.jsx        # Movie card UI with favourite toggle
-    Navbar.jsx           # Top navigation with favourites badge
+    Loader.jsx           # Loading indicator
+    MovieCard.jsx        # Card UI + favourites toggle
+    Navbar.jsx           # Glassmorphic navigation with badge
   context/
-    FavoritesContext.jsx # Context + localStorage for favourites
+    FavoritesContext.jsx # Context + localStorage sync
   pages/
-    SearchPage.jsx       # Home page: search + results + pagination
-    MovieDetailPage.jsx  # Detailed view for a single movie
-    FavoritesPage.jsx    # Grid of favourited movies
-  App.jsx                # Routes + main layout
-  App.css                # Global styles & animations
-  main.jsx               # App entry point (ReactDOM + Router + Provider)
-
-
+    SearchPage.jsx       # Search + pagination
+    MovieDetailPage.jsx  # Detail info per movie
+    FavoritesPage.jsx    # List of saved movies
+  App.jsx                # Routes + layout
+  App.css                # Styling & animations
+  main.jsx               # App entry point
