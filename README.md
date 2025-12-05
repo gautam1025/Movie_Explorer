@@ -70,7 +70,7 @@ src/
 ⚙️ Setup & Installation
 
     # 1. Clone the repository
-        git clone https://github.com/gautam1025/movie-explorer.git
+        git clone https://github.com/gautam1025/movie_explorer.git
         cd movie-explorer
 
     # 2. Install dependencies
