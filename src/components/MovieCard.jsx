@@ -7,7 +7,6 @@ export default function MovieCard({ movie }) {
   const hasPoster = movie.Poster && movie.Poster !== "N/A";
 
   const handleFavClick = (e) => {
-    // prevent link navigation when clicking the star
     e.preventDefault();
     e.stopPropagation();
     toggleFavorite(movie);

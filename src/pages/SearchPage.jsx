@@ -4,19 +4,20 @@ import Loader from "../components/Loader.jsx";
 import MovieCard from "../components/MovieCard.jsx";
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("Batman");
+  const [query, setQuery] = useState("Avengers");
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function fetchMovies(activePage = page) {
+  // Reusable fetch function
+  async function fetchMovies(activeQuery = query, activePage = page) {
     try {
       setLoading(true);
       setError("");
 
-      const res = await searchMovies(query, activePage);
+      const res = await searchMovies(activeQuery, activePage);
 
       setMovies(res.movies);
       setTotalResults(res.totalResults);
@@ -32,20 +33,38 @@ export default function SearchPage() {
   }
 
   useEffect(() => {
-    fetchMovies(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchMovies(query, 1);
   }, []);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setMovies([]);
+      setTotalResults(0);
+      setError("");
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setPage(1);
+      fetchMovies(query, 1);
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [query]);
+
+  useEffect(() => {
+    if (!query.trim()) return;
+    if (page === 1) return;
+    fetchMovies(query, page);
+  }, [page]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setPage(1);
-    fetchMovies(1);
   };
 
   const totalPages = Math.ceil(totalResults / 10);
   const goToPage = (newPage) => {
     setPage(newPage);
-    fetchMovies(newPage);
   };
 
   return (
@@ -69,8 +88,12 @@ export default function SearchPage() {
 
       {error && !loading && <p className="error-text">{error}</p>}
 
-      {!loading && !error && movies.length === 0 && (
+      {!loading && !error && movies.length === 0 && query.trim() && (
         <p className="empty-text">No movies found.</p>
+      )}
+
+      {!loading && !error && !query.trim() && (
+        <p className="empty-text">Start typing to search for a movie.</p>
       )}
 
       {!loading && movies.length > 0 && (

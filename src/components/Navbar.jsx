@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+
 import { Link, NavLink } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 

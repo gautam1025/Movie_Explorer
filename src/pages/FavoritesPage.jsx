@@ -1,4 +1,4 @@
-// src/pages/FavoritesPage.jsx
+
 import { useFavorites } from "../context/FavoritesContext.jsx";
 import MovieCard from "../components/MovieCard.jsx";
 

@@ -1,4 +1,4 @@
-// src/context/FavoritesContext.jsx
+
 import { createContext, useContext, useEffect, useState } from "react";
 
 const FavoritesContext = createContext();
@@ -15,7 +15,7 @@ export function FavoritesProvider({ children }) {
     }
   });
 
-  // keep localStorage in sync
+
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
@@ -33,7 +33,7 @@ export function FavoritesProvider({ children }) {
       if (exists) {
         return prev.filter((m) => m.imdbID !== movie.imdbID);
       }
-      // store minimal info needed for display
+
       const { imdbID, Title, Year, Poster, Type } = movie;
       return [...prev, { imdbID, Title, Year, Poster, Type }];
     });
