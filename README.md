@@ -9,12 +9,7 @@ Built as part of a **UI Dev / React JS Internship Task**.
 
 🔗 **Live Website**: _Coming Soon (Netlify/Vercel deployment)_  
 📦 **Repository**: https://github.com/gautam1025/Movie_Explorer
-<<<<<<< HEAD
-🎥 Project Demo Video: [Watch on Google Drive]()
-
-=======
 🎥 Project Demo Video: [Watch on Google Drive](https://drive.google.com/file/d/1NV8B9ZoBY6nA5LM3ODPUl4YsMLbGliUX/view?usp=drive_link)
->>>>>>> 0c1229906f2333be1291d12eda193bff29d836b1
 
 ---
 
