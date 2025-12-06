@@ -1,30 +1,89 @@
 import { useEffect, useState } from "react";
-import { searchMovies } from "../api/omdb.js";
+import { searchMovies, getMovieDetails } from "../api/omdb.js";
 import Loader from "../components/Loader.jsx";
 import MovieCard from "../components/MovieCard.jsx";
 
+const OMDB_PAGE_SIZE = 10;
+const LOGICAL_PAGE_SIZE = 20;
+
+const FEATURED_IDS = [
+  "tt4154796",
+  "tt0848228",
+  "tt4154756",
+  "tt1375666",
+  "tt0816692",
+  "tt0468569",
+  "tt0111161",
+  "tt0133093"
+];
+
 export default function SearchPage() {
-  const [query, setQuery] = useState("Avengers");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [type] = useState("");
+  const [year] = useState("");
 
-  // Reusable fetch function
-  async function fetchMovies(activeQuery = query, activePage = page) {
+  async function loadFeaturedMovies() {
     try {
       setLoading(true);
       setError("");
 
-      const res = await searchMovies(activeQuery, activePage);
+      const results = await Promise.all(
+        FEATURED_IDS.map((id) => getMovieDetails(id))
+      );
 
-      setMovies(res.movies);
-      setTotalResults(res.totalResults);
+      const featured = results
+        .filter(Boolean)
+        .map((movie) => ({
+          imdbID: movie.imdbID,
+          Title: movie.Title,
+          Year: movie.Year,
+          Poster: movie.Poster,
+          Type: movie.Type
+        }));
 
-      if (res.error) {
-        setError(res.error);
+      setMovies(featured);
+      setTotalResults(featured.length);
+    } catch (err) {
+      setError("Failed to load featured movies.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function fetchMovies(activeQuery = query, logicalPage = page) {
+    try {
+      setLoading(true);
+      setError("");
+
+      const firstOmdbPage = (logicalPage - 1) * 2 + 1;
+
+      const res1 = await searchMovies(activeQuery, firstOmdbPage, type, year);
+      let combinedMovies = res1.movies || [];
+      const total = res1.totalResults || 0;
+      let errorMsg = res1.error || "";
+
+      const totalOmdbPages = Math.ceil(total / OMDB_PAGE_SIZE);
+      const secondOmdbPage = firstOmdbPage + 1;
+
+      if (secondOmdbPage <= totalOmdbPages) {
+        const res2 = await searchMovies(
+          activeQuery,
+          secondOmdbPage,
+          type,
+          year
+        );
+        combinedMovies = combinedMovies.concat(res2.movies || []);
+        if (!errorMsg && res2.error) errorMsg = res2.error;
       }
+
+      setMovies(combinedMovies);
+      setTotalResults(total);
+      if (errorMsg) setError(errorMsg);
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -33,21 +92,16 @@ export default function SearchPage() {
   }
 
   useEffect(() => {
-    fetchMovies(query, 1);
-  }, []);
-
-  useEffect(() => {
     if (!query.trim()) {
-      setMovies([]);
-      setTotalResults(0);
-      setError("");
+      setPage(1);
+      loadFeaturedMovies();
       return;
     }
 
     const timeoutId = setTimeout(() => {
       setPage(1);
       fetchMovies(query, 1);
-    }, 500); // 500ms debounce
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [query]);
@@ -62,7 +116,9 @@ export default function SearchPage() {
     e.preventDefault();
   };
 
-  const totalPages = Math.ceil(totalResults / 10);
+  const totalPages =
+    totalResults > 0 ? Math.ceil(totalResults / LOGICAL_PAGE_SIZE) : 0;
+
   const goToPage = (newPage) => {
     setPage(newPage);
   };
@@ -92,8 +148,8 @@ export default function SearchPage() {
         <p className="empty-text">No movies found.</p>
       )}
 
-      {!loading && !error && !query.trim() && (
-        <p className="empty-text">Start typing to search for a movie.</p>
+      {!loading && !error && !query.trim() && movies.length === 0 && (
+        <p className="empty-text">Loading some top-rated picks for you...</p>
       )}
 
       {!loading && movies.length > 0 && (
@@ -114,7 +170,8 @@ export default function SearchPage() {
                 ← Prev
               </button>
               <span>
-                Page {page} of {totalPages}
+                Page {page} of {totalPages} · Showing {movies.length} of{" "}
+                {totalResults}
               </span>
               <button
                 className="btn btn-secondary"

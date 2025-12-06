@@ -1,5 +1,5 @@
-
-import { Link, NavLink } from "react-router-dom";
+// src/components/Navbar.jsx
+import { NavLink, Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 
 export default function Navbar() {
@@ -8,52 +8,40 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <div className="container nav-inner">
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          <h1 className="logo">
-            <span>🎬</span>
-            <span>Movie Explorer</span>
-          </h1>
+        <Link to="/" className="logo-link">
+          <div className="logo">
+            <div className="logo-mark">🎬</div>
+            <div className="logo-text">
+              <span className="logo-title">Movie Explorer</span>
+              <span className="logo-subtitle">Find your next favorite movie</span>
+            </div>
+          </div>
         </Link>
 
-        <nav style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+        <nav className="nav-links">
           <NavLink
             to="/"
-            style={({ isActive }) => ({
-              fontSize: "0.9rem",
-              textDecoration: "none",
-              color: isActive ? "#e5e7eb" : "#9ca3af",
-            })}
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "nav-link-active" : ""}`
+            }
           >
-            Search
+            <div className="nav-pill">
+              <span className="nav-icon">🔍</span>
+              <span className="nav-label">Search</span>
+            </div>
           </NavLink>
 
           <NavLink
             to="/favorites"
-            style={({ isActive }) => ({
-              fontSize: "0.9rem",
-              textDecoration: "none",
-              color: isActive ? "#e5e7eb" : "#9ca3af",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.4rem",
-            })}
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "nav-link-active" : ""}`
+            }
           >
-            <span>Favourites</span>
-            <span
-              style={{
-                minWidth: "1.6rem",
-                height: "1.6rem",
-                borderRadius: "999px",
-                border: "1px solid #4b5563",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "0.8rem",
-                background: "rgba(15, 23, 42, 0.9)",
-              }}
-            >
-              ⭐ {favoritesCount}
-            </span>
+            <div className="nav-pill nav-pill-heart">
+              <span className="nav-icon">❤️</span>
+              <span className="nav-label">Favourites</span>
+              <span className="nav-count">{favoritesCount}</span>
+            </div>
           </NavLink>
         </nav>
       </div>

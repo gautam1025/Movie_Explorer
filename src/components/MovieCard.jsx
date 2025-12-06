@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext.jsx";
 
@@ -6,6 +7,26 @@ export default function MovieCard({ movie }) {
   const fav = isFavorite(movie.imdbID);
   const hasPoster = movie.Poster && movie.Poster !== "N/A";
 
+  // For scroll fade‑in
+  const cardRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect(); // animate only once
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (cardRef.current) observer.observe(cardRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleFavClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -13,13 +34,16 @@ export default function MovieCard({ movie }) {
   };
 
   return (
-    <div className="movie-card">
+    <div
+      ref={cardRef}
+      className={`movie-card ${visible ? "card-visible" : "card-hidden"}`}
+    >
       <button
-        className={`fav-chip ${fav ? "fav-chip-active" : ""}`}
+        className={`fav-btn ${fav ? "fav-btn-active" : ""}`}
         onClick={handleFavClick}
         aria-label={fav ? "Remove from favourites" : "Add to favourites"}
       >
-        ⭐
+        {fav ? "❤️" : "🤍"}
       </button>
 
       <Link to={`/movie/${movie.imdbID}`} className="movie-link">
