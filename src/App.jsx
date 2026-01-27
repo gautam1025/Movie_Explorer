@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import SearchPage from "./Pages/SearchPage.jsx";
+import SearchPage from "./pages/SearchPage.jsx";
 import MovieDetailPage from "./pages/MovieDetailPage.jsx";
 import FavoritesPage from "./pages/FavoritesPage.jsx";
 import Navbar from "./components/Navbar.jsx";
