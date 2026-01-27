@@ -1,18 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, memo } from "react";
 import { Link } from "react-router-dom";
 import { useFavorites } from "../context/FavoritesContext.jsx";
+import { useTilt } from "../hooks/useTilt.js";
 
-export default function MovieCard({ movie }) {
+const MovieCard = memo(function MovieCard({ movie }) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const fav = isFavorite(movie.imdbID);
   const hasPoster = movie.Poster && movie.Poster !== "N/A";
 
-  // For scroll fade‑in
+  // For scroll fade-in
   const cardRef = useRef(null);
   const [visible, setVisible] = useState(false);
 
-  // For 3D tilt effect
-  const [tiltStyle, setTiltStyle] = useState({});
+  // Optimized 3D tilt effect using custom hook
+  const { tiltRef, handleMouseMove, handleMouseLeave } = useTilt();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,37 +31,22 @@ export default function MovieCard({ movie }) {
     return () => observer.disconnect();
   }, []);
 
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / centerY * -10; // Max 10 degrees
-    const rotateY = (x - centerX) / centerX * 10; // Max 10 degrees
-    setTiltStyle({
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px) scale(1.04)`
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTiltStyle({});
-  };
-
-  const handleFavClick = (e) => {
+  // Memoize event handlers to prevent unnecessary re-renders
+  const handleFavClick = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     toggleFavorite(movie);
-  };
+  }, [movie, toggleFavorite]);
 
   return (
     <div
-      ref={cardRef}
+      ref={(el) => {
+        cardRef.current = el;
+        tiltRef.current = el;
+      }}
       className={`movie-card ${visible ? "card-visible" : "card-hidden"}`}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={tiltStyle}
     >
       <button
         className={`fav-btn ${fav ? "fav-btn-active" : ""}`}
@@ -73,7 +59,11 @@ export default function MovieCard({ movie }) {
       <Link to={`/movie/${movie.imdbID}`} className="movie-link">
         <div className="poster-wrapper">
           {hasPoster ? (
-            <img src={movie.Poster} alt={movie.Title} />
+            <img
+              src={movie.Poster}
+              alt={movie.Title}
+              loading="lazy" // Lazy load images for better performance
+            />
           ) : (
             <div className="poster-placeholder">No Image</div>
           )}
@@ -86,4 +76,8 @@ export default function MovieCard({ movie }) {
       </Link>
     </div>
   );
-}
+});
+
+MovieCard.displayName = 'MovieCard';
+
+export default MovieCard;

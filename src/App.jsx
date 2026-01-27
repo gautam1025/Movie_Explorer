@@ -1,10 +1,14 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import SearchPage from "./pages/SearchPage.jsx";
-import MovieDetailPage from "./pages/MovieDetailPage.jsx";
-import FavoritesPage from "./pages/FavoritesPage.jsx";
+import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import Loader from "./components/Loader.jsx";
+
+// Lazy load pages for better performance
+const SearchPage = lazy(() => import("./pages/SearchPage.jsx"));
+const MovieDetailPage = lazy(() => import("./pages/MovieDetailPage.jsx"));
+const FavoritesPage = lazy(() => import("./pages/FavoritesPage.jsx"));
 
 export default function App() {
   return (
@@ -19,11 +23,13 @@ export default function App() {
       <Navbar />
 
       <main className="container">
-        <Routes>
-          <Route path="/" element={<SearchPage />} />
-          <Route path="/movie/:id" element={<MovieDetailPage />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-        </Routes>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/" element={<SearchPage />} />
+            <Route path="/movie/:id" element={<MovieDetailPage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <Footer />

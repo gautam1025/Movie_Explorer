@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { searchMovies, getMovieDetails } from "../api/omdb.js";
 import Loader from "../components/Loader.jsx";
 import MovieCard from "../components/MovieCard.jsx";
+import SearchForm from "../components/SearchForm.jsx";
 
 const OMDB_PAGE_SIZE = 10;
 const LOGICAL_PAGE_SIZE = 20;
@@ -55,7 +56,7 @@ export default function SearchPage() {
     }
   }
 
-  async function fetchMovies(activeQuery = query, logicalPage = page) {
+  const fetchMovies = useCallback(async (activeQuery = query, logicalPage = page) => {
     try {
       setLoading(true);
       setError("");
@@ -89,7 +90,7 @@ export default function SearchPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [query, page, type, year]);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -127,18 +128,11 @@ export default function SearchPage() {
     <section>
       <h2 className="page-title">Search Movies</h2>
 
-      <form className="search-form" onSubmit={handleSubmit}>
-        <input
-          className="search-input"
-          type="text"
-          value={query}
-          placeholder="Search movie title..."
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button className="btn" type="submit">
-          Search
-        </button>
-      </form>
+      <SearchForm
+        query={query}
+        onQueryChange={setQuery}
+        onSubmit={handleSubmit}
+      />
 
       {loading && <Loader />}
 
