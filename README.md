@@ -9,7 +9,6 @@ Built as part of a **UI Dev / React JS Internship Task**.
 
 🔗 **Live Website**: https://movie-explorer-gg.vercel.app
 📦 **Repository**: https://github.com/gautam1025/Movie_Explorer
-🎥 Project Demo Video: [Watch on Google Drive](https://drive.google.com/file/d/1NV8B9ZoBY6nA5LM3ODPUl4YsMLbGliUX/view?usp=drive_link)
 
 ---
 
